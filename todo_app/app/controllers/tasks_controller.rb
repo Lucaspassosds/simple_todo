@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: [:show, :edit, :update, :destroy, :complete]
+  skip_before_action :verify_authenticity_token  # Add this for API
+  before_action :set_task, only: [:show, :update, :destroy, :complete]
   
   def index
     @tasks = case params[:filter]
@@ -10,44 +11,40 @@ class TasksController < ApplicationController
              else
                Task.all
              end
+    
+    render json: @tasks
   end
   
   def show
-  end
-  
-  def new
-    @task = Task.new
+    render json: @task
   end
   
   def create
     @task = Task.new(task_params)
     
     if @task.save
-      redirect_to tasks_path, notice: 'Task was successfully created.'
+      render json: @task, status: :created
     else
-      render :new
+      render json: { errors: @task.errors }, status: :unprocessable_entity
     end
-  end
-   
-  def edit
   end
   
   def update
     if @task.update(task_params)
-      redirect_to tasks_path, notice: 'Task was successfully updated.'
+      render json: @task
     else
-      render :edit
+      render json: { errors: @task.errors }, status: :unprocessable_entity
     end
   end
   
   def destroy
     @task.destroy
-    redirect_to tasks_path, notice: 'Task was successfully deleted.'
+    head :no_content
   end
   
   def complete
     @task.update(completed: !@task.completed)
-    redirect_to tasks_path, notice: 'Task status updated.'
+    render json: @task
   end
   
   private
