@@ -1,11 +1,21 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# test/fixtures/tasks.yml
 
 one:
-  title: MyString
-  description: MyText
+  title: First Task
+  description: This is the first task
   completed: false
 
 two:
-  title: MyString
-  description: MyText
+  title: Second Task
+  description: This is the second task
+  completed: true
+
+completed_task:
+  title: Completed Task
+  description: This task is done
+  completed: true
+
+pending_task:
+  title: Pending Task
+  description: This task is not done
   completed: false
